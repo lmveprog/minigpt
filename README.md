@@ -1,7 +1,8 @@
 # minigpt
 
-a small gpt (decoder-only transformer) i wrote from scratch in pytorch, mostly
-to force myself to actually understand attention instead of importing it.
+a small gpt (decoder-only transformer) i wrote from scratch in pytorch for one
+of my school projects, mostly to force myself to actually understand attention
+instead of importing it.
 
 so there's no `nn.Transformer` and no `nn.MultiheadAttention` here - the whole
 attention block is done by hand in [`model.py`](model.py). it's a char-level
@@ -18,20 +19,6 @@ minigpt/
 ├── viz.py           # makes the two plots below
 └── assets/          # the plots
 ```
-
-## run it
-
-```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-
-python prepare_data.py        # -> data/corpus.txt
-python train.py --steps 3000  # cpu, apple mps or cuda, picks automatically
-python sample.py --prompt "Candide" --tokens 500
-```
-
-default model is ~0.8M params and trains in about a minute on an m-series mac.
-nothing here needs a gpu farm, that's kind of the point.
 
 ## the loss
 
@@ -79,8 +66,7 @@ trained on the entire sequence at once without ever peeking at the answer.
   char probabilities. the input embedding and this output layer share weights
   (weight tying), which is a standard gpt thing that saves params.
 
-generation (`sample.py`) is just: predict next char, sample one, stick it on the
-end, repeat.
+generation is just: predict next char, sample one, stick it on the end, repeat.
 
 ## honest limitations
 
@@ -90,8 +76,3 @@ book (*Cunégonde*), but it'll also invent words that don't exist. that's expect
 at this size, and it keeps the focus on the architecture rather than scale. the
 exact same code just gets bigger (`n_layer`, `n_embd`, more data) to become a
 real gpt.
-
-## license
-
-code is mit. the training text is *Candide* by Voltaire, public domain (project
-gutenberg).
